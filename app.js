@@ -2,10 +2,11 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
-//importo il router
+//importo il router e i middleware
 const filmRoutes = require('./routers/films');
+const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
-//middleware
+
 app.use(express.json());
 
 //Definisco gli asset statici
@@ -17,8 +18,14 @@ app.get('/', (req, res) => {
     res.send('Ciao, se mi leggi va tutto bene!');
 })
 
-// Usa filmRoutes invece di blogRouter
+
 app.use('/films', filmRoutes);
+
+// Middleware per le rotte inesistenti
+app.use(notFound);
+
+// Middleware per la gestione errori
+app.use(errorHandler);
 
 //Metto il server in ascolto sulla porta 3000
 app.listen(port, () => {
