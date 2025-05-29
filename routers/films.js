@@ -9,6 +9,6 @@ router.get('/', filmsController.index);
 router.get('/:id', filmsController.show);
 
 // Delete route - remove a blog
-router.delete('/:id', filmsController.destroy);
+// router.delete('/:id', filmsController.destroy);
 
 module.exports = router;
