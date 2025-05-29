@@ -1,14 +1,14 @@
 const express = require('express')
-const blogController = require('../controller/blogController');
+const filmsController = require('../controller/filmsController');
 const router = express.Router();
 
 // Index route - list all blogs
-router.get('/', blogController.index);
+router.get('/', filmsController.index);
 
 // Show route - display a single blog
-router.get('/:id', blogController.show);
+router.get('/:id', filmsController.show);
 
 // Delete route - remove a blog
-router.delete('/:id', blogController.destroy);
+router.delete('/:id', filmsController.destroy);
 
 module.exports = router;

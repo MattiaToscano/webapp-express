@@ -2,10 +2,8 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
-
-
 //importo il router
-const blogRouter = require('./routers/blog');
+const filmRoutes = require('./routers/films');
 
 //middleware
 app.use(express.json());
@@ -19,9 +17,8 @@ app.get('/', (req, res) => {
     res.send('Ciao, se mi leggi va tutto bene!');
 })
 
-app.use('/blog', blogRouter);
-
-
+// Usa filmRoutes invece di blogRouter
+app.use('/films', filmRoutes);
 
 //Metto il server in ascolto sulla porta 3000
 app.listen(port, () => {

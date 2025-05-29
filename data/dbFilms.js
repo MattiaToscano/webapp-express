@@ -7,7 +7,7 @@ const connection = mysql.createConnection({
     user: 'root',
     port: 3306,
     password: 'root',
-    database: 'db_blog'
+    database: 'movies_db'
 })
 
 //Creo connession al db
