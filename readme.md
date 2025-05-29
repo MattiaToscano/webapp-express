@@ -1,22 +1,19 @@
-Ciao ragazzi, esercizio di oggi: ex-express-blog-sql
-repo: express-blog-sql
+Ciao ragazzi, esercizio di oggi: Setup Web App Express
+repo: webapp-express
 Esercizio
-Prendiamo le API precedentemente create per il vostro blog ed aggiungiamo la persistenza tramite la connessione a un DB
-Milestone 1
-Importiamo il db in allegato su MySQL Workbench
-Installiamo il client mysql2 con npm i mysql2 nell’app Express
-Creiamo un file di configurazione per connettere il database
-Inseriamo un console.log nella logica di connessione e proviamo ad avviare l’applicazione per verificare che non ci siano errori.
-Milestone 2
-Facciamo sì che l’API di INDEX restituisca la lista di post recuperata dal database in formato JSON
-Verifichiamo su Postman che la risposta sia corretta
-Milestone 3
-Facciamo sì che l’API di DESTROY permetta di eliminare un post dal database
-Verifichiamo su Postman che la chiamata non dia errore e risponda 204
-Verifichiamo su MySQL Workbench che il post venga effettivamente rimosso
-Milestone 4
-Facciamo sì che l’API di SHOW restituisca il post desiderato in formato JSON
-Verifichiamo su Postman che la risposta sia corretta
-Numero di push: minimo 8
-Bonus:
-Far sì che la SHOW restituisca il post comprensivo di tag, recuperandoli grazie alla relazione tra post e tags, esistente sul database
+Ciao ragazzi, è ora di mettere alla prova le vostre conoscenze iniziando a costruire la vostra prima app completa! Ecco i primi step
+Utilizzando il file in allegato, creiamo un database con MySQL Workbench
+Creiamo una nuova applicazione Express
+Colleghiamo l’app al db e verifichiamo che tutto funzioni
+Prepariamo una rotta index per ottenere la lista dei film
+Prepariamo una rotta show per ottenere i dettagli di un singolo film e le sue recensioni
+Numero minimo di push: da oggi non vi comunicherò il numero minimo di push, dovendo lavorare su più giorni sulla stessa repo
+Bonus
+Inserire delle immagini nel progetto express e dunque nel db
+Inserire i dati di connessione al database come variabili d’ambiente
+Inserire le vostre API in controller
+Inserire le vostre rotte in un router
+Inserire un middleware per le rotte inesistenti
+Inserire un middleware per la gestione errori
+Creare un middleware per le immagini
+Mostrare la media delle recensioni nel dettaglio del libro
