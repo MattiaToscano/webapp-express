@@ -1,13 +1,27 @@
 const connection = require("../data/dbFilms");
 
 const index = (req, res) => {
-    connection.query('SELECT * FROM movies', (err, moviesResult) => {
-        if (err) return res.status(500).json({ error: "Database Query Failed:" + err });
+    // Specifica esplicitamente i campi da selezionare
+    const sql = 'SELECT id, title, director, genre, release_year, abstract, image, created_at, updated_at FROM movies';
+
+    connection.query(sql, (err, moviesResult) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: "Database Query Failed: " + err.message });
+        }
+
+        console.log('=== DATABASE RESULTS ===');
+        console.log('Number of movies:', moviesResult.length);
+        console.log('First movie raw data:', moviesResult[0]);
+        console.log('First movie image field:', moviesResult[0]?.image);
 
         const movies = moviesResult.map((movie) => {
+            console.log(`Processing movie ID ${movie.id}: image = "${movie.image}"`);
+
             return {
                 ...movie,
-                image: req.imagePath + movie.image
+                image: movie.image ? `/images/${movie.image}` : null,
+                image_url: movie.image ? `/images/${movie.image}` : null
             }
         })
 
@@ -16,32 +30,31 @@ const index = (req, res) => {
 }
 
 const show = (req, res) => {
-    const { id } = req.params
+    const id = req.params.id;
+    const sql = "SELECT id, title, director, genre, release_year, abstract, image, created_at, updated_at FROM movies WHERE id = ?";
 
-    const movieSql = `
-    SELECT M.*, ROUND(AVG(R.vote)) as average_vote 
-    FROM movies M
-    JOIN reviews R ON R.movie_id = M.id 
-    WHERE M.id = ?`;
+    connection.query(sql, [id], (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: "Database error" });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ error: "Movie not found" });
+        }
 
-    const reviewSql = 'SELECT * FROM reviews WHERE movie_id = ?';
+        const movie = results[0];
 
-    connection.query(movieSql, [id], (err, movieResult) => {
-        if (err) return res.status(500).json({ error: "Database Query Failed:" + err });
+        console.log('=== SINGLE MOVIE DEBUG ===');
+        console.log('Raw movie data:', movie);
+        console.log('Movie image field:', `"${movie.image}"`);
+        console.log('Image field type:', typeof movie.image);
 
-        if (movieResult.length === 0) return res.status(404).json({ error: "Movie not found" });
+        movie.image_url = movie.image ? `/images/${movie.image}` : null;
+        movie.image_full_path = movie.image ? `${req.protocol}://${req.get('host')}/images/${movie.image}` : null;
 
-        const movie = movieResult[0];
-        // Add the image path to the movie object
-        movie.image = req.imagePath + movie.image;
-
-        connection.query(reviewSql, [id], (err, reviewResult) => {
-            if (err) return res.status(500).json({ error: "Database Query Failed:" + err });
-            movie.reviews = reviewResult;
-            res.json(movie);
-        })
-    })
-}
+        res.json({ data: movie });
+    });
+};
 
 module.exports = {
     index,

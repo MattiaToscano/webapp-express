@@ -1,6 +1,9 @@
 const setImagePath = (req, res, next) => {
-    req.imagePath = `${req.protocol}://${req.get('host')}/imgs/movies_cover/`;
+    res.locals.imagePath = (filename) => {
+        return `/img/${filename}`;
+    };
     next();
-}
+};
+
 
 module.exports = setImagePath
