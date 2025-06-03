@@ -1,82 +1,49 @@
-// Connessione al database
-const connection = require('../data/dbFilms');
+const connection = require("../data/db");
 
-// Lista di tutti i film
-const index = async (req, res) => {
-    try {
-        console.log('📋 Recupero lista film...');
-        const [films] = await connection.query('SELECT * FROM film');
+const index = (req, res) => {
+    connection.query('SELECT * FROM movies', (err, moviesResult) => {
+        if (err) return res.status(500).json({ error: "Database Query Failed:" + err });
 
-        res.json({
-            success: true,
-            count: films.length,
-            data: films
-        });
-    } catch (error) {
-        console.error('❌ Errore recupero film:', error);
-        res.status(500).json({
-            success: false,
-            error: 'Errore nel recupero dei film',
-            details: error.message
-        });
-    }
-};
+        const movies = moviesResult.map((movie) => {
+            return {
+                ...movie,
+                image: req.imagePath + movie.image
+            }
+        })
 
-// Mostra un singolo film con recensioni e media
-const show = async (req, res) => {
-    const id = req.params.id;
+        res.json(movies);
+    })
+}
 
-    try {
-        console.log(`🎬 Recupero film ID: ${id}`);
+const show = (req, res) => {
+    const { id } = req.params
 
-        // Ottieni il film
-        const [films] = await connection.query('SELECT * FROM film WHERE id = ?', [id]);
+    const movieSql = `
+    SELECT M.*, ROUND(AVG(R.vote)) as average_vote 
+    FROM movies M
+    JOIN reviews R ON R.movie_id = M.id 
+    WHERE M.id = ?`;
 
-        if (films.length === 0) {
-            return res.status(404).json({
-                success: false,
-                error: 'Film non trovato'
-            });
-        }
+    const reviewSql = 'SELECT * FROM reviews WHERE movie_id = ?';
 
-        const film = films[0];
+    connection.query(movieSql, [id], (err, movieResult) => {
+        if (err) return res.status(500).json({ error: "Database Query Failed:" + err });
 
-        // Ottieni le recensioni
-        const [recensioni] = await connection.query(
-            'SELECT * FROM recensioni WHERE film_id = ?',
-            [id]
-        );
+        if (movieResult.length === 0) return res.status(404).json({ error: "Movie not found" });
 
-        film.recensioni = recensioni;
+        const movie = movieResult[0];
+        // Add the image path to the movie object
+        movie.image = req.imagePath + movie.image;
 
-        // Calcola la media dei voti
-        let mediaVoti = 0;
-        if (recensioni.length > 0) {
-            const sommaVoti = recensioni.reduce((acc, rec) => acc + rec.voto, 0);
-            mediaVoti = parseFloat((sommaVoti / recensioni.length).toFixed(1));
-        }
-
-        film.mediaVoti = mediaVoti;
-        film.numeroRecensioni = recensioni.length;
-
-        console.log(`✅ Film trovato: ${film.titolo} (Media: ${mediaVoti})`);
-
-        res.json({
-            success: true,
-            data: film
-        });
-
-    } catch (error) {
-        console.error('❌ Errore recupero film:', error);
-        res.status(500).json({
-            success: false,
-            error: 'Errore nel recupero del film',
-            details: error.message
-        });
-    }
-};
+        connection.query(reviewSql, [id], (err, reviewResult) => {
+            if (err) return res.status(500).json({ error: "Database Query Failed:" + err });
+            movie.reviews = reviewResult;
+            res.json(movie);
+        })
+    })
+}
 
 module.exports = {
     index,
     show
-};
+}

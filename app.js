@@ -1,54 +1,28 @@
-
-const cors = require('cors');
 const express = require('express');
+const cors = require('cors');
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000; // Usa la variabile d'ambiente
 
-//Configurazione CORS
-app.use(cors({
-    origin: process.env.FE_APP
-}));
-
-// Importa i middleware e router
-const filmRoutes = require('./routers/films');
+// Import dei router e middleware
+const filmsRouter = require('./routers/films');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
 // Middleware
+app.use(cors({ origins: process.env.FE_APP })); // Configura CORS
 app.use(express.json());
-app.use(express.static('public'));
 
-// Rotta base
+// Rotta di test
 app.get('/', (req, res) => {
-    res.json({
-        message: 'API Films funzionante!',
-        endpoints: {
-            films: '/films',
-            film_detail: '/films/:id'
-        }
-    });
+    res.json({ message: 'Server is running!' });
 });
 
-// Router dei film
-app.use('/films', filmRoutes);
-
-// Endpoint per la lista dei film
-app.get('/api/movies', (req, res) => {
-
-    const movies = [
-        { id: 1, title: "Inception", author: "Christopher Nolan", abstract: "Un thriller sci-fi", image: "https://via.placeholder.com/300x450" },
-        { id: 2, title: "The Matrix", author: "Wachowski Sisters", abstract: "Realtà virtuale", image: "https://via.placeholder.com/300x450" },
-        { id: 3, title: "Interstellar", author: "Christopher Nolan", abstract: "Viaggio spaziale", image: "https://via.placeholder.com/300x450" }
-    ];
-    res.json(movies);
-});
-
+// Usa il router per i film invece della rotta hardcoded
+app.use('/films', filmsRouter);
 
 // Middleware per errori
 app.use(notFound);
 app.use(errorHandler);
 
-// Avvia il server
-app.listen(port, () => {
-    console.log(`🚀 Server avviato su http://localhost:${port}`);
-    console.log(`📊 Database: ${process.env.DB_NAME}`);
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
 });

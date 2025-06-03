@@ -1,14 +1,9 @@
-const express = require('express')
-const filmsController = require('../controller/filmsController');
+const express = require("express");
 const router = express.Router();
 
-// Rotta index - elenca tutti i films
-router.get('/', filmsController.index);
+const movieController = require("../controllers/movieController");
 
-// Rotta show - mostra un singolo film
-router.get('/:id', filmsController.show);
-
-// Rotta di cancellazione - rimuove un film
-// router.delete('/:id', filmsController.destroy);
+router.get("/", movieController.index);
+router.get("/:id", movieController.show);
 
 module.exports = router;
