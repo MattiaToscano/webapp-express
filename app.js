@@ -6,6 +6,8 @@ const port = 3000;
 const filmRoutes = require('./routers/films');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
+//Importo pacchetto cors
+const cors = require('cors');
 
 app.use(express.json());
 

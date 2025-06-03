@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^5.1.0",
     "init": "^0.1.2",
     "mysql2": "^3.14.1"
@@ -22,6 +23,5 @@
   "bugs": {
     "url": "https://github.com/MattiaToscano/express-blog-sql/issues"
   },
-  "homepage": "https://github.com/MattiaToscano/express-blog-sql#readme",
-  "devDependencies": {}
+  "homepage": "https://github.com/MattiaToscano/express-blog-sql#readme"
 }
