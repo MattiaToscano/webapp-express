@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "init": "^0.1.2",
     "mysql2": "^3.14.1"
@@ -10,9 +11,9 @@
   "description": "Ciao ragazzi, esercizio di oggi: ex-express-blog-sql\r repo: express-blog-sql\r Esercizio\r Prendiamo le API precedentemente create per il vostro blog ed aggiungiamo la persistenza tramite la connessione a un DB\r Milestone 1\r Importiamo il db in allegato su MySQL Workbench\r Installiamo il client mysql2 con npm i mysql2 nell’app Express\r Creiamo un file di configurazione per connettere il database\r Inseriamo un console.log nella logica di connessione e proviamo ad avviare l’applicazione per verificare che non ci siano errori.\r Milestone 2\r Facciamo sì che l’API di INDEX restituisca la lista di post recuperata dal database in formato JSON\r Verifichiamo su Postman che la risposta sia corretta\r Milestone 3\r Facciamo sì che l’API di DESTROY permetta di eliminare un post dal database\r Verifichiamo su Postman che la chiamata non dia errore e risponda 204\r Verifichiamo su MySQL Workbench che il post venga effettivamente rimosso\r Milestone 4\r Facciamo sì che l’API di SHOW restituisca il post desiderato in formato JSON\r Verifichiamo su Postman che la risposta sia corretta\r Numero di push: minimo 8\r Bonus:\r Far sì che la SHOW restituisca il post comprensivo di tag, recuperandoli grazie alla relazione tra post e tags, esistente sul database",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --env-file=.env app.js",
-    "watch": "node --eng-file=.env --watch app.js"
+    "watch": "node --env-file=.env --watch app.js",
+    "dev": "nodemon app.js"
   },
   "repository": {
     "type": "git",
