@@ -1,4 +1,4 @@
-const connection = require("../data/db");
+const connection = require("../data/dbFilms");
 
 const index = (req, res) => {
     connection.query('SELECT * FROM movies', (err, moviesResult) => {

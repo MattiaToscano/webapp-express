@@ -1,28 +1,37 @@
-const express = require('express');
-const cors = require('cors');
-const app = express();
-const PORT = process.env.PORT || 3000; // Usa la variabile d'ambiente
+const express = require("express"); //import express
+const app = express(); //create app
+const PORT = process.env.SERVER_PORT || 3000; //port
+const cors = require("cors"); //import cors
 
-// Import dei router e middleware
-const filmsRouter = require('./routers/films');
-const { notFound, errorHandler } = require('./middleware/errorMiddleware');
+//router
+const movieRouter = require("./routers/films");
 
-// Middleware
-app.use(cors({ origins: process.env.FE_APP })); // Configura CORS
+//custom middleware
+const notFound = require("./middleware/notFound");
+const errorHandler = require("./middleware/errorHandler");
+const imagePathMiddleware = require("./middleware/imagePath");
+
+//middleware
+app.use(express.static("public"));
 app.use(express.json());
+app.use(imagePathMiddleware);
 
-// Rotta di test
-app.get('/', (req, res) => {
-    res.json({ message: 'Server is running!' });
+//cors
+app.use(cors({ origin: process.env.FE_APP }));
+
+//entry point
+app.get("/", (req, res) => {
+    res.send("API MOVIES");
 });
 
-// Usa il router per i film invece della rotta hardcoded
-app.use('/films', filmsRouter);
+//use router - CORREZIONE: usa movieRouter invece di films
+app.use("/api/movies", movieRouter);
 
-// Middleware per errori
-app.use(notFound);
-app.use(errorHandler);
+//use custom middleware
+app.use(notFound)
+app.use(errorHandler)
 
+//listen
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
