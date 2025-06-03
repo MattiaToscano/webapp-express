@@ -11,6 +11,10 @@ const cors = require('cors');
 
 app.use(express.json());
 
+
+//Uso il middleware per il CORS
+app.use(cors({ origin: process.env.FE_APP }))
+
 //Definisco gli asset statici
 app.use(express.static('public'));
 
