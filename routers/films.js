@@ -30,6 +30,6 @@ router.get('/:id/reviews', (req, res) => {
 router.get("/:id", filmsController.show);
 
 //Rotta Store
-router.store("/", upload.single("image"), filmsController.store);
+router.post("/", upload.single("image"), filmsController.store);
 
 module.exports = router;

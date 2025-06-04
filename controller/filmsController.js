@@ -1,3 +1,4 @@
+const { status } = require("init");
 const connection = require("../data/dbFilms");
 
 const index = (req, res) => {
@@ -56,7 +57,32 @@ const show = (req, res) => {
     });
 };
 
+//Metodo store
+
+const store = (req, res, next) => {
+    //Recupero i dati dal body della richiesta
+    const { title, director, genre, release_year, abstract } = req.body;
+
+    //Creo la query di inserimento
+    const sql = "INSERT INTO movies (title, director, genre, release_year, abstract, image) VALUES (?, ?, ?, ?, ?, ?)"; //"?" Sono dei segnaposto per i valori che andremo ad inserire
+
+    //Eseguo la query
+    connection.query(sql, [title, director, genre, release_year, abstract, null], (err, results) => {
+        //Se c'e un errore mi viene catturato ed esegue direttamente la prossima istruzione
+        if (err) return next('Errore caricamento nuovo film');
+
+        //Restitutisco un oggetto di successo
+        res.status(201).json({
+            status: "success",
+            message: "Film inserito correttamente",
+        })
+    })
+};
+
+
+
 module.exports = {
     index,
-    show
+    show,
+    store
 }
