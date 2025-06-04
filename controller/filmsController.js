@@ -64,19 +64,19 @@ const store = (req, res, next) => {
     const { title, director, genre, release_year, abstract } = req.body;
 
     //Creo la query di inserimento
-    const sql = "INSERT INTO movies (title, director, genre, release_year, abstract, image) VALUES (?, ?, ?, ?, ?, ?)"; //"?" Sono dei segnaposto per i valori che andremo ad inserire
+    const sql = "INSERT INTO movies (title, director, genre, release_year, abstract, image) VALUES (?, ?, ?, ?, ?, ?)";
 
-    //Eseguo la query
-    connection.query(sql, [title, director, genre, release_year, abstract, null], (err, results) => {
-        //Se c'e un errore mi viene catturato ed esegue direttamente la prossima istruzione
+    const imageName = req.file.filename; //Recupero il nome del file caricato
+
+    //Eseguo la query - aggiungi imageName come sesto parametro
+    connection.query(sql, [title, director, genre, release_year, abstract, imageName], (err, results) => {
         if (err) return next('Errore caricamento nuovo film');
 
-        //Restitutisco un oggetto di successo
         res.status(201).json({
             status: "success",
             message: "Film inserito correttamente",
-        })
-    })
+        });
+    });
 };
 
 
