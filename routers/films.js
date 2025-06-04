@@ -29,4 +29,7 @@ router.get('/:id/reviews', (req, res) => {
 // Route per un film specifico 
 router.get("/:id", filmsController.show);
 
+//Rotta Store
+router.store("/", upload.single("image"), filmsController.store);
+
 module.exports = router;
