@@ -82,31 +82,38 @@ const store = (req, res, next) => {
 //definizione metodo storeReview all'interno di questo controller perchè la recensione è legata strettamente al libro
 const storeReview = (req, res) => {
     const { id } = req.params;
-}
+    const { author, content, vote } = req.body;
 
-//Mi recupero i dati dal body della richiesta
-const { author, content } = req.body;
+    if (!author || !content) {
+        return res.status(400).json({
+            status: "error",
+            message: "Author e content sono richiesti"
+        });
+    }
 
-//Preparo la query
-const sql = "INSERT INTO reviews (movie_id, author, content) VALUES (?, ?, ?,)";
+    // Query per inserire la recensione con vote
+    const query = "INSERT INTO reviews (movie_id, author, content, vote) VALUES (?, ?, ?, ?)";
 
-//Eseguo la query
-connection.query(sql, [text, author, content], (err, results) => {
-    if (err) {
-        console.error('Database error:', err);
-        return res.status(500).json({ error: "Database error" });
+    connection.query(query, [id, author, content, vote], (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({
+                status: "error",
+                message: "Errore durante l'inserimento della recensione"
+            });
+        }
 
         res.status(201).json({
             status: "success",
-            message: "Recensione inserita correttamente", id: results.insertId
+            message: "Recensione aggiunta con successo",
+            reviewId: results.insertId
         });
-    }
-}),
+    });
+};
 
-
-    module.exports = {
-        index,
-        show,
-        store,
-        storeReview
-    }
+module.exports = {
+    index,
+    show,
+    store,
+    storeReview
+}

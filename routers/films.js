@@ -33,7 +33,7 @@ router.get("/:id", filmsController.show);
 router.post("/", upload.single("image"), filmsController.store);
 
 //Store Review
-router.post("/:id/reviews", filmsController.storeReview);
+router.post('/:id/reviews', filmsController.storeReview);
 
 
 
