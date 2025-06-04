@@ -9,7 +9,7 @@ router.get("/", filmsController.index);
 //Recupero il middleware per l'upload delle immagini
 const upload = require("../middleware/multer");
 
-// Route per le recensioni di un film specifico 
+// Route per le recensioni di un film specifico
 router.get('/:id/reviews', (req, res) => {
     const { id } = req.params;
     console.log('Fetching reviews for movie ID:', id);
@@ -26,10 +26,15 @@ router.get('/:id/reviews', (req, res) => {
     });
 });
 
-// Route per un film specifico 
+// Route per un film specifico
 router.get("/:id", filmsController.show);
 
 //Rotta Store
 router.post("/", upload.single("image"), filmsController.store);
+
+//Store Review
+router.post("/:id/reviews", filmsController.storeReview);
+
+
 
 module.exports = router;

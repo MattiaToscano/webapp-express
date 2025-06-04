@@ -15,6 +15,9 @@ const storage = multer.diskStorage({
     }
 })
 
+
+//Dichiarare una variabile upload che utilizza multer con la configurazione dello storage
+//multer è un middleware per gestire l'upload dei file in Node.js
 const upload = multer({ storage });
 
 module.exports = upload;

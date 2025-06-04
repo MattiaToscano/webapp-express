@@ -79,10 +79,22 @@ const store = (req, res, next) => {
     });
 };
 
+//definizione metodo storeReview all'interno di questo controller perchè la recensione è legata strettamente al libro
+const storeReview = (req, res) => {
+    const { id } = req.params;
+}
+
+//Mi recupero i dati dal body della richiesta
+const { author, content } = req.body;
+
+//Preparo la query
+const sql = "INSERT INTO reviews (movie_id, author, content) VALUES (?, ?, ?)";
+
 
 
 module.exports = {
     index,
     show,
-    store
+    store,
+    storeReview
 }
