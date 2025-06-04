@@ -1,31 +1,29 @@
 const express = require("express");
 const router = express.Router();
-
+const connection = require("../data/dbFilms");
 const filmsController = require("../controller/filmsController");
 
+// Route per tutti i film
 router.get("/", filmsController.index);
-router.get("/:id", filmsController.show);
 
-router.get('/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        console.log('Fetching movie with ID:', id); // Debug
+// Route per le recensioni di un film specifico 
+router.get('/:id/reviews', (req, res) => {
+    const { id } = req.params;
+    console.log('Fetching reviews for movie ID:', id);
 
-        const query = "SELECT * FROM movies WHERE id = ?";
-        const [result] = await connection.execute(query, [id]);
-
-        console.log('Database result:', result); // Debug
-
-        if (result.length === 0) {
-            return res.status(404).json({ error: 'Film non trovato' }); // Aggiungi RETURN
+    const query = 'SELECT * FROM reviews WHERE movie_id = ?';
+    connection.query(query, [id], (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Database error' });
         }
 
-        res.json(result[0]);
-
-    } catch (error) {
-        console.error('Error fetching movie:', error);
-        res.status(500).json({ error: 'Errore interno del server' });
-    }
+        console.log('Reviews found:', results.length);
+        res.json(results);
+    });
 });
+
+// Route per un film specifico 
+router.get("/:id", filmsController.show);
 
 module.exports = router;
