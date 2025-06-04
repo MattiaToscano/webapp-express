@@ -9,5 +9,12 @@ const storage = multer.diskStorage({
         //cb è una funzione di callback che prende due argomenti: errore e nome del file
 
         //definizione del nome del file che andremo ad uploadare
-        const unique
+        const uniqueName = `${Date.now()}-${file.originalname}`;
+
+        cb(null, uniqueName); //null indica che non c'è errore, uniqueName è il nome del file
     }
+})
+
+const upload = multer({ storage });
+
+module.exports = upload;

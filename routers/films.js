@@ -6,6 +6,9 @@ const filmsController = require("../controller/filmsController");
 // Route per tutti i film
 router.get("/", filmsController.index);
 
+//Recupero il middleware per l'upload delle immagini
+const upload = require("../middleware/multer");
+
 // Route per le recensioni di un film specifico 
 router.get('/:id/reviews', (req, res) => {
     const { id } = req.params;
