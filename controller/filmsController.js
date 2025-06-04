@@ -88,13 +88,25 @@ const storeReview = (req, res) => {
 const { author, content } = req.body;
 
 //Preparo la query
-const sql = "INSERT INTO reviews (movie_id, author, content) VALUES (?, ?, ?)";
+const sql = "INSERT INTO reviews (movie_id, author, content) VALUES (?, ?, ?,)";
+
+//Eseguo la query
+connection.query(sql, [text, author, content], (err, results) => {
+    if (err) {
+        console.error('Database error:', err);
+        return res.status(500).json({ error: "Database error" });
+
+        res.status(201).json({
+            status: "success",
+            message: "Recensione inserita correttamente", id: results.insertId
+        });
+    }
+}),
 
 
-
-module.exports = {
-    index,
-    show,
-    store,
-    storeReview
-}
+    module.exports = {
+        index,
+        show,
+        store,
+        storeReview
+    }
